@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القطة ليتا 🐾</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        h1 { color: #d9534f; }
+        p { font-size: 18px; color: #333; }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>لو لقيت القطة دي فأنا تايهة! 🐾</h1>
+        <p><strong>اسم القطة:</strong> ليتا</p>
+        <p><strong>صاحبة القطة:</strong> ميار شريف</p>
+        <p><strong>رقم التليفون للتواصل:</strong> 01285318492or01553051866</p> <!-- 1. حطي رقمك هنا -->
+
+        <hr>
+
+        <p>من فضلك اضغط على الزرار عشان تشارك موقعك معايا وأعرف أجي أستلمها منك:</p>
+        
+        <button class="btn" onclick="sendLocation()">مشاركة موقعي مع صاحبة القطة</button>
+        
+        <p id="status"></p>
+    </div>
+
+    <script>
+        function sendLocation() {
+            var statusText = document.getElementById("status");
+
+            if (navigator.geolocation) {
+                statusText.innerText = "جاري إرسال موقعك...";
+                
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+                    var userLocationMap = `https://www.google.com/maps?q=${userLat},${userLng}`;
+
+        fetch("https://formspree.io/f/xljdrowv", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: "تم مسح كود القطة ليتا",
+                map_link: userLocationMap
+            })
+        }).then(response => {
+            statusText.innerText = "شكراً جداً! تم إرسال موقعك لصاحبة القطة بنجاح";
+        }).catch(error => {
+            statusText.innerText = "خطأ أثناء إرسال الموقع، يرجى الاتصال برقم التليفون";
+        });
+                  
+
+                }, function(error) {
+                    statusText.innerText = "لم نتمكن من تحديد موقعك، يرجى الاتصال برقم التليفون مباشرة.";
+                }, { enableHighAccuracy: true });
+            } else {
+                statusText.innerText = "المتصفح لا يدعم مشاركة الموقع.";
+            }
+        }
+    </script>
+
+</body>
+</html>
